@@ -1,0 +1,107 @@
+:root {
+  color-scheme: light;
+  --soil: #8b5e3c;
+  --soil-dark: #6b452b;
+  --grass: #eaf5e6;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--grass);
+  color: #2b2b2b;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: #4b7f52;
+  color: white;
+}
+
+header h1 { margin: 0; font-size: 1.25rem; }
+
+#gold {
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+}
+
+main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+#grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 6px;
+}
+
+.plot {
+  aspect-ratio: 1;
+  background: var(--soil);
+  border: 2px solid var(--soil-dark);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  transition: transform 0.1s ease;
+}
+
+.plot:hover { transform: scale(1.04); }
+.plot:disabled, .plot.growing { cursor: default; }
+
+.plot.ready { background: #d9a441; }
+.plot.empty { background: var(--soil); }
+
+.plot.locked {
+  background: #b9c9b0;
+  border-color: #9db092;
+  cursor: default;
+}
+.plot.locked:hover { transform: none; }
+
+.plot.buyable {
+  background: #cfe0c4;
+  border-color: #9db092;
+  border-style: dashed;
+}
+
+.plot .price {
+  position: absolute;
+  bottom: 2px;
+  font-size: 0.6rem;
+  font-weight: bold;
+  color: #3a3a3a;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 0 3px;
+  border-radius: 4px;
+}
+
+.progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background: #ffe08a;
+}
+
+#message {
+  min-height: 1.4em;
+  text-align: center;
+  color: #a33;
+  font-size: 0.9rem;
+}
