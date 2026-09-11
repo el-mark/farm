@@ -8,7 +8,10 @@ const SAVE_PATH = path.join(DATA_DIR, 'save.json');
 export async function loadState() {
   try {
     const raw = await readFile(SAVE_PATH, 'utf-8');
-    return JSON.parse(raw);
+    const saved = JSON.parse(raw);
+    // merge onto fresh defaults so fields added in later versions of the game
+    // (e.g. points/won) don't crash on an older save file
+    return { ...createInitialState(), ...saved };
   } catch (err) {
     if (err.code === 'ENOENT') {
       const initial = createInitialState();

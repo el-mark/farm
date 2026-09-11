@@ -11,6 +11,8 @@ const OWNED_ROW_START = Math.floor((GRID_ROWS - OWNED_ROWS) / 2);
 const LAND_BASE_PRICE = 8;
 const LAND_PRICE_STEP = 4; // each plot you buy makes the next one cost more
 
+export const POINTS_TO_WIN = 100;
+
 export function createInitialState() {
   const plots = [];
   for (let row = 0; row < GRID_ROWS; row++) {
@@ -21,7 +23,17 @@ export function createInitialState() {
       plots.push({ owned, crop: null, plantedAt: null });
     }
   }
-  return { gold: 20, landPurchased: 0, plots };
+  return { gold: 20, landPurchased: 0, points: 0, won: false, plots };
+}
+
+export function restartGame(state) {
+  const fresh = createInitialState();
+  state.gold = fresh.gold;
+  state.landPurchased = fresh.landPurchased;
+  state.points = fresh.points;
+  state.won = fresh.won;
+  state.plots = fresh.plots;
+  return state;
 }
 
 function neighborsOf(index) {
@@ -51,6 +63,7 @@ export function getLandPrice(state) {
 }
 
 export function buyLand(state, plotIndex) {
+  if (state.won) throw new Error('You already reached the goal — restart to play again');
   const plot = state.plots[plotIndex];
   if (!plot) throw new Error('Invalid plot');
   if (plot.owned) throw new Error('You already own this plot');
@@ -79,6 +92,9 @@ export function getView(state) {
   const price = getLandPrice(state);
   return {
     gold: state.gold,
+    points: state.points,
+    pointsToWin: POINTS_TO_WIN,
+    won: state.won,
     cols: GRID_COLS,
     rows: GRID_ROWS,
     plots: state.plots.map((plot, index) => {
@@ -98,6 +114,7 @@ export function getView(state) {
 }
 
 export function plant(state, plotIndex, cropId) {
+  if (state.won) throw new Error('You already reached the goal — restart to play again');
   const crop = CROPS[cropId];
   if (!crop) throw new Error('Unknown crop');
   const plot = state.plots[plotIndex];
@@ -113,13 +130,17 @@ export function plant(state, plotIndex, cropId) {
 }
 
 export function harvest(state, plotIndex) {
+  if (state.won) throw new Error('You already reached the goal — restart to play again');
   const plot = state.plots[plotIndex];
   if (!plot || !plot.owned || !plot.crop) throw new Error('Nothing planted here');
   if (getStage(plot, Date.now()) !== 'ready') throw new Error('Crop is not ready yet');
 
   const crop = CROPS[plot.crop];
   state.gold += crop.sellPrice;
+  state.points += crop.points;
   plot.crop = null;
   plot.plantedAt = null;
+
+  if (state.points >= POINTS_TO_WIN) state.won = true;
   return state;
 }

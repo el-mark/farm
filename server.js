@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { loadState, saveState } from './src/store.js';
-import { getView, plant, harvest, buyLand } from './src/game.js';
+import { getView, plant, harvest, buyLand, restartGame } from './src/game.js';
 import { CROPS } from './src/crops.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -47,6 +47,12 @@ app.post('/api/harvest', async (req, res) => {
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
+});
+
+app.post('/api/restart', async (req, res) => {
+  restartGame(state);
+  await saveState(state);
+  res.json(getView(state));
 });
 
 const PORT = process.env.PORT || 3300;

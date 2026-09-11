@@ -1,6 +1,10 @@
 const gridEl = document.getElementById('grid');
 const goldEl = document.getElementById('gold');
+const pointsEl = document.getElementById('points');
 const messageEl = document.getElementById('message');
+const winOverlay = document.getElementById('win-overlay');
+const winText = document.getElementById('win-text');
+const restartBtn = document.getElementById('restart-btn');
 
 const STAGE_ICON = {
   empty: '',
@@ -56,8 +60,23 @@ async function buyLand(plotIndex) {
   render(data);
 }
 
+async function restart() {
+  const res = await fetch('/api/restart', { method: 'POST' });
+  const data = await res.json();
+  render(data);
+}
+
+restartBtn.onclick = restart;
+
 function render(state) {
   goldEl.textContent = `Gold: ${state.gold}`;
+  pointsEl.textContent = `Points: ${state.points} / ${state.pointsToWin}`;
+
+  winOverlay.hidden = !state.won;
+  if (state.won) {
+    winText.textContent = `You grew your way to ${state.points} points. Restart to play again!`;
+  }
+
   gridEl.style.gridTemplateColumns = `repeat(${state.cols}, 1fr)`;
   gridEl.innerHTML = '';
 

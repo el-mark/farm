@@ -9,13 +9,24 @@
 <body>
   <header>
     <h1>🚜 Little Farm</h1>
-    <div id="gold">Gold: 0</div>
+    <div class="stats">
+      <div id="gold">Gold: 0</div>
+      <div id="points">Points: 0 / 0</div>
+    </div>
   </header>
 
   <main>
     <div id="grid"></div>
     <p id="message"></p>
   </main>
+
+  <div id="win-overlay" hidden>
+    <div class="win-card">
+      <h2>🏆 You reached the goal!</h2>
+      <p id="win-text"></p>
+      <button id="restart-btn">Restart</button>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>

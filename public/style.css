@@ -25,11 +25,17 @@ header {
 
 header h1 { margin: 0; font-size: 1.25rem; }
 
-#gold {
+.stats {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#gold, #points {
   font-weight: bold;
   background: rgba(255, 255, 255, 0.15);
   padding: 0.4rem 0.8rem;
   border-radius: 999px;
+  white-space: nowrap;
 }
 
 main {
@@ -105,3 +111,42 @@ main {
   color: #a33;
   font-size: 0.9rem;
 }
+
+#win-overlay[hidden] {
+  display: none;
+}
+
+#win-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 30, 20, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.win-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 320px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.win-card h2 { margin-top: 0; }
+
+.win-card button {
+  margin-top: 1rem;
+  padding: 0.6rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 999px;
+  background: #4b7f52;
+  color: white;
+  cursor: pointer;
+}
+
+.win-card button:hover { background: #3d6a43; }
